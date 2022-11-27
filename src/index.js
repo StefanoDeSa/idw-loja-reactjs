@@ -12,6 +12,7 @@ import Entrar from './routes/contas/entrar';
 import Home, { loader as homeLoader, ServidorIndisponivel } from './routes/home';
 import Perfil, { loader as perfilLoader } from './routes/perfil';
 import Produto, { loader as produtoLoader, ProdutoNaoEncontrado } from './routes/produto';
+import Pedidos from './routes/pedidos';
 import RecuperarAcesso from './routes/contas/recuperar-acesso';
 
 const router = createBrowserRouter([
@@ -57,6 +58,12 @@ const router = createBrowserRouter([
             loader: homeLoader,
             element: <Home />,
             errorElement: <ServidorIndisponivel />,
+          },
+          {
+            path: 'pedidos',
+            // loader: homeLoader,
+            element: <Pedidos />,
+            // errorElement: <ServidorIndisponivel />,
           }
         ]
       }

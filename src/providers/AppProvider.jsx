@@ -72,6 +72,17 @@ const AppProvider = ({ children }) => {
     setProdutosDoCarrinho(lista);
   };
 
+  const onFechar = () => {
+    let itens = produtosDoCarrinho
+
+    // Cadastrar o pedido no backend usando os itens do carrinho atual
+    
+    // Limpar o carrinho
+    setProdutosDoCarrinho([])
+
+    // Levar o usuário até a página dos seus pedidos
+  };
+
   // Utiliza o hook useEffect para executar um código
   // quando houver alteração no state produtosDoCarrinho.
   // Especificamente, o código atualiza o localStorage
@@ -85,6 +96,7 @@ const AppProvider = ({ children }) => {
     setProdutosDoCarrinho,
     onComprar,
     onRemover,
+    onFechar,
     showCarrinho,
     setShowCarrinho,
     handleFecharCarrinho,

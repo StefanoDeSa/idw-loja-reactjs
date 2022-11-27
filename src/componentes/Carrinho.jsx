@@ -1,8 +1,10 @@
 import { Button } from "react-bootstrap";
 import formatarPreco from "../lib/funcoes";
+import auth from "../lib/auth";
 import { useLojaContext } from "../providers/AppProvider";
 import Alerta from "./Alerta";
 import "./Carrinho.scss";
+import { Link } from "react-router-dom";
 /**
  * O componente ItemDoCarrinho representa um item
  * da lista de produtos do Carrinho.
@@ -34,7 +36,7 @@ function ItemDoCarrinho({ produto, onRemover }) {
  */
 export default function Carrinho() {
   // utiliza o hook useContext para obter os valores do LojaContext
-  const { produtosDoCarrinho, onRemover } = useLojaContext();
+  const { produtosDoCarrinho, onRemover, onFechar } = useLojaContext();
 
   /**
    * Esta função calcula o total do carrinho com base
@@ -66,16 +68,23 @@ export default function Carrinho() {
           ))}
         {(!produtosDoCarrinho ||
           (produtosDoCarrinho && produtosDoCarrinho.length === 0)) && (
-          <Alerta
-            titulo={"Seu carrinho está vazio"}
-            mensagem={"Que tal mudar essa situação? 😉"}
-          ></Alerta>
-        )}
+            <Alerta
+              titulo={"Seu carrinho está vazio"}
+              mensagem={"Que tal mudar essa situação? 😉"}
+            ></Alerta>
+          )}
       </ul>
       <div id="carrinho-total">
         <div>Total</div>
         <div>{formatarPreco(calcularTotal())}</div>
       </div>
+      {produtosDoCarrinho.length !== 0 && auth.getUserInfo() && (
+        <div className="d-flex justify-content-center mt-5">
+          <Button as={Link} to={`pedidos`} variant="primary" size="md" onClick={() => onFechar()}>
+            Fechar pedido
+          </Button>
+        </div>
+        )}
     </div>
   );
 }
