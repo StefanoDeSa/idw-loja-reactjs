@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { Pedidos } from '../lib/Pedidos'
 
 // Define o context
 export const LojaContext = createContext();
@@ -72,15 +73,12 @@ const AppProvider = ({ children }) => {
     setProdutosDoCarrinho(lista);
   };
 
-  const onFechar = () => {
-    let itens = produtosDoCarrinho
-
+  const onFechar = async () => {
     // Cadastrar o pedido no backend usando os itens do carrinho atual
+    await Pedidos.create(produtosDoCarrinho);
     
     // Limpar o carrinho
     setProdutosDoCarrinho([])
-
-    // Levar o usuário até a página dos seus pedidos
   };
 
   // Utiliza o hook useEffect para executar um código
