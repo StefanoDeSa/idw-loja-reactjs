@@ -2,9 +2,10 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, Link } from "react-router-dom";
 import { Pedidos } from "../lib/Pedidos";
 import { Button } from "react-bootstrap";
+import { format } from "date-fns"
 
 
 export async function loader() {
@@ -25,9 +26,18 @@ export default function Pedido() {
           <ListGroup.Item key={pedido.id}>
             <Container>
               <Row>
-                <Col>{pedido.data}</Col>
-                <Col>{console.log(pedido)}</Col>
-                <Col className='d-flex justify-content-end'><Button>Abrir</Button></Col>
+                <Col>{format(new Date(pedido.data), "dd/MM/yyyy HH:mm")}</Col>
+                <Col>{pedido.totalDoPedido.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL'
+                })}</Col>
+                <Col className='d-flex justify-content-end'>
+                  <Link to={`/detalhe`}>
+                    <Button>
+                      Abrir
+                    </Button>
+                  </Link>
+                </Col>
               </Row>
             </Container>
           </ListGroup.Item>

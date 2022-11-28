@@ -30,7 +30,6 @@ export const Pedidos = {
           encodeValuesOnly: true,
         }
       );
-      console.log(query)
       const response = await fetch(`${API}/pedidos/?${query}`, {
         headers: {
           Authorization: `${BEARER} ${auth.getToken()}`
@@ -48,7 +47,7 @@ export const Pedidos = {
       throw error;
     }
   },
-  async create(produtos) {
+  async create(produtos, valor) {
       const user = auth.getUserInfo();
       const currentdate = new Date(); 
       try {
@@ -63,7 +62,8 @@ export const Pedidos = {
               data: {
                   data: currentdate,
                   user: user.id,
-                  produtos: produtos
+                  prods: produtos,
+                  totalDoPedido: valor 
               }
             }
           )
