@@ -20,19 +20,19 @@ export default function Pedido() {
   return (
     <>
       <h1>Olá, Aqui está seus pedidos!</h1>
-
+      {console.log(dados)}
       <ListGroup>
         {dados.map((pedido) => (
           <ListGroup.Item key={pedido.id}>
             <Container>
               <Row>
-                <Col>{format(new Date(pedido.data), "dd/MM/yyyy HH:mm")}</Col>
-                <Col>{pedido.totalDoPedido.toLocaleString('pt-BR', {
+                <Col><h6>Data</h6>{format(new Date(pedido.data), "dd/MM/yyyy HH:mm")}</Col>
+                <Col className="d-flex flex-column align-items-end"><h6>Valor total</h6>{pedido.totalDoPedido.toLocaleString('pt-BR', {
                   style: 'currency',
                   currency: 'BRL'
                 })}</Col>
                 <Col className='d-flex justify-content-end'>
-                  <Link to={`/detalhe`}>
+                  <Link to={`${pedido.id}`}>
                     <Button>
                       Abrir
                     </Button>

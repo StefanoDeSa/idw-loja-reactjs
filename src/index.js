@@ -66,7 +66,7 @@ const router = createBrowserRouter([
             element: <Pedidos />,
           },
           {
-            path: 'detalhe',
+            path: 'pedidos/:idPedido',
             loader: detalheLoader,
             element: <Detalhe />,
           }

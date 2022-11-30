@@ -73,7 +73,7 @@ const AppProvider = ({ children }) => {
     setProdutosDoCarrinho(lista);
   };
 
-  const onFechar = async () => {
+  const onFechar = () => {
     // Cadastrar o pedido no backend usando os itens do carrinho atual
     let cont = 0
     produtosDoCarrinho.forEach(produto => {
@@ -81,7 +81,7 @@ const AppProvider = ({ children }) => {
       cont += valorProduto
     })
     console.log("produtosDoCarrinho:", produtosDoCarrinho)
-    await Pedidos.create(produtosDoCarrinho, cont);
+    Pedidos.create(produtosDoCarrinho, cont);
     
     // Limpar o carrinho
     setProdutosDoCarrinho([])

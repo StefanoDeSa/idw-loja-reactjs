@@ -47,6 +47,7 @@ export const Pedidos = {
       throw error;
     }
   },
+
   async create(produtos, valor) {
       const user = auth.getUserInfo();
       const currentdate = new Date(); 
@@ -79,6 +80,27 @@ export const Pedidos = {
       } catch (error) {
         throw error;
       }
+  },
+
+  async findOnePedido(pedidoId){
+    try {
+      const response = await fetch(`${API}/pedidos/${pedidoId}/?populate=produtos`,{
+        headers: {
+          Authorization: `${BEARER} ${auth.getToken()}`,
+          "Content-type": "application/json",
+        }
+      });
+      const json = await response.json();
+      if (json.data) {
+        // const pedido = strapiDataToObject(json.data);
+        return json.data;
+      }
+      if (json.error) {
+        throw json.error;
+      }
+    } catch (error) {
+      throw error;
+    }
   },
 
 }
