@@ -49,42 +49,191 @@ export const Pedidos = {
   },
 
   async create(produtos, valor) {
-      const user = auth.getUserInfo();
-      const currentdate = new Date(); 
-      try {
-        const response = await fetch(`${API}/pedidos`, {
-          method: 'POST',
-          headers: {
-            Authorization: `${BEARER} ${auth.getToken()}`,
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(
-            {
-              data: {
-                  data: currentdate,
-                  user: user.id,
-                  prods: produtos,
-                  totalDoPedido: valor 
-              }
+    const user = auth.getUserInfo();
+    const currentdate = new Date();
+
+    try {
+      const response = await fetch(`${API}/pedidos`, {
+        method: 'POST',
+        headers: {
+          Authorization: `${BEARER} ${auth.getToken()}`,
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(
+          {
+            data: {
+              data: currentdate,
+              user: user.id,
+              totalDoPedido: valor
             }
-          )
-        });
-        const json = await response.json();
-        if (json.data) {
-          const pedido = strapiDataToObject(json.data);
-          return pedido;
-        }
-        if (json.error) {
-          throw json.error;
-        }
-      } catch (error) {
-        throw error;
+          }
+        )
+      });
+      const json = await response.json();
+      if (json.data) {
+        const item = strapiDataToObject(json.data);
+        produtos.map(async (produto) => {
+          try {
+            const response = await fetch(`${API}/itens-do-pedidos`, {
+              method: 'POST',
+              headers: {
+                Authorization: `${BEARER} ${auth.getToken()}`,
+                "Content-type": "application/json",
+              },
+              body: JSON.stringify(
+                {
+                  data: {
+                    quantidade: produto.quantidadeNoCarrinho,
+                    produto: produto,
+                    pedido: item
+                  }
+                }
+              )
+            });
+            const json = await response.json();
+            if (json.data) {
+              const item = strapiDataToObject(json.data);
+              return item;
+            }
+            if (json.error) {
+              throw json.error;
+            }
+          } catch (error) {
+            throw error;
+          }
+        })
+        return item;
       }
+      if (json.error) {
+        throw json.error;
+      }
+    } catch (error) {
+      throw error;
+    };
   },
 
-  async findOnePedido(pedidoId){
+  // async create(produtos, valor) {
+  //   const user = auth.getUserInfo();
+  //   const currentdate = new Date();
+
+  //   try {
+  //     const response = await fetch(`${API}/pedidos`, {
+  //       method: 'POST',
+  //       headers: {
+  //         Authorization: `${BEARER} ${auth.getToken()}`,
+  //         "Content-type": "application/json",
+  //       },
+  //       body: JSON.stringify(
+  //         {
+  //           data: {
+  //             data: currentdate,
+  //             user: user.id,
+  //             totalDoPedido: valor
+  //           }
+  //         }
+  //       )
+  //     });
+  //     const json = await response.json();
+  //     if (json.data) {
+  //       const item = strapiDataToObject(json.data);
+  //       produtos.map(async (produto) => {
+  //         try {
+  //           const response = await fetch(`${API}/itens-do-pedidos`, {
+  //             method: 'POST',
+  //             headers: {
+  //               Authorization: `${BEARER} ${auth.getToken()}`,
+  //               "Content-type": "application/json",
+  //             },
+  //             body: JSON.stringify(
+  //               {
+  //                 data: {
+  //                   quantidade: produto.quantidadeNoCarrinho,
+  //                   produto: produto,
+  //                   pedido: item
+  //                 }
+  //               }
+  //             )
+  //           });
+  //           const json = await response.json();
+  //           if (json.data) {
+  //             const item = strapiDataToObject(json.data);
+  //             return item;
+  //           }
+  //           if (json.error) {
+  //             throw json.error;
+  //           }
+  //         } catch (error) {
+  //           throw error;
+  //         }
+  //       })
+  //       return item;
+  //     }
+  //     if (json.error) {
+  //       throw json.error;
+  //     }
+  //   } catch (error) {
+  //     throw error;
+  //   };
+  // },
+
+  // async findOneItem(itemId) {
+  //   try {
+  //     const response = await fetch(`${API}/itens-do-pedidos/${itemId}/?populate=produto`, {
+  //       headers: {
+  //         Authorization: `${BEARER} ${auth.getToken()}`,
+  //         "Content-type": "application/json",
+  //       }
+  //     });
+  //     const json = await response.json();
+  //     if (json.data) {
+  //       const pedido = strapiDataToObject(json.data);
+  //       return json.data;
+  //     }
+  //     if (json.error) {
+  //       throw json.error;
+  //     }
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // },
+
+  // async create(produtos, valor) {
+  //     const user = auth.getUserInfo();
+  //     const currentdate = new Date(); 
+  //     try {
+  //       const response = await fetch(`${API}/pedidos`, {
+  //         method: 'POST',
+  //         headers: {
+  //           Authorization: `${BEARER} ${auth.getToken()}`,
+  //           "Content-type": "application/json",
+  //         },
+  //         body: JSON.stringify(
+  //           {
+  //             data: {
+  //                 data: currentdate,
+  //                 user: user.id,
+  //                 prods: produtos,
+  //                 totalDoPedido: valor 
+  //             }
+  //           }
+  //         )
+  //       });
+  //       const json = await response.json();
+  //       if (json.data) {
+  //         const pedido = strapiDataToObject(json.data);
+  //         return pedido;
+  //       }
+  //       if (json.error) {
+  //         throw json.error;
+  //       }
+  //     } catch (error) {
+  //       throw error;
+  //     }
+  // },
+
+  async findOnePedido(pedidoId) {
     try {
-      const response = await fetch(`${API}/pedidos/${pedidoId}/?populate=produtos`,{
+      const response = await fetch(`${API}/pedidos/${pedidoId}`, {
         headers: {
           Authorization: `${BEARER} ${auth.getToken()}`,
           "Content-type": "application/json",
@@ -92,8 +241,8 @@ export const Pedidos = {
       });
       const json = await response.json();
       if (json.data) {
-        // const pedido = strapiDataToObject(json.data);
-        return json.data;
+        const pedido = strapiDataToObject(json.data);
+        return pedido;
       }
       if (json.error) {
         throw json.error;

@@ -80,7 +80,6 @@ const AppProvider = ({ children }) => {
       let valorProduto = produto.preco * produto.quantidadeNoCarrinho
       cont += valorProduto
     })
-    console.log("produtosDoCarrinho:", produtosDoCarrinho)
     Pedidos.create(produtosDoCarrinho, cont);
     
     // Limpar o carrinho
