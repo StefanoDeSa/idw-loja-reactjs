@@ -112,137 +112,35 @@ export const Pedidos = {
     };
   },
 
-  // async create(produtos, valor) {
-  //   const user = auth.getUserInfo();
-  //   const currentdate = new Date();
-
-  //   try {
-  //     const response = await fetch(`${API}/pedidos`, {
-  //       method: 'POST',
-  //       headers: {
-  //         Authorization: `${BEARER} ${auth.getToken()}`,
-  //         "Content-type": "application/json",
-  //       },
-  //       body: JSON.stringify(
-  //         {
-  //           data: {
-  //             data: currentdate,
-  //             user: user.id,
-  //             totalDoPedido: valor
-  //           }
-  //         }
-  //       )
-  //     });
-  //     const json = await response.json();
-  //     if (json.data) {
-  //       const item = strapiDataToObject(json.data);
-  //       produtos.map(async (produto) => {
-  //         try {
-  //           const response = await fetch(`${API}/itens-do-pedidos`, {
-  //             method: 'POST',
-  //             headers: {
-  //               Authorization: `${BEARER} ${auth.getToken()}`,
-  //               "Content-type": "application/json",
-  //             },
-  //             body: JSON.stringify(
-  //               {
-  //                 data: {
-  //                   quantidade: produto.quantidadeNoCarrinho,
-  //                   produto: produto,
-  //                   pedido: item
-  //                 }
-  //               }
-  //             )
-  //           });
-  //           const json = await response.json();
-  //           if (json.data) {
-  //             const item = strapiDataToObject(json.data);
-  //             return item;
-  //           }
-  //           if (json.error) {
-  //             throw json.error;
-  //           }
-  //         } catch (error) {
-  //           throw error;
-  //         }
-  //       })
-  //       return item;
-  //     }
-  //     if (json.error) {
-  //       throw json.error;
-  //     }
-  //   } catch (error) {
-  //     throw error;
-  //   };
-  // },
-
-  // async findOneItem(itemId) {
-  //   try {
-  //     const response = await fetch(`${API}/itens-do-pedidos/${itemId}/?populate=produto`, {
-  //       headers: {
-  //         Authorization: `${BEARER} ${auth.getToken()}`,
-  //         "Content-type": "application/json",
-  //       }
-  //     });
-  //     const json = await response.json();
-  //     if (json.data) {
-  //       const pedido = strapiDataToObject(json.data);
-  //       return json.data;
-  //     }
-  //     if (json.error) {
-  //       throw json.error;
-  //     }
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // },
-
-  // async create(produtos, valor) {
-  //     const user = auth.getUserInfo();
-  //     const currentdate = new Date(); 
-  //     try {
-  //       const response = await fetch(`${API}/pedidos`, {
-  //         method: 'POST',
-  //         headers: {
-  //           Authorization: `${BEARER} ${auth.getToken()}`,
-  //           "Content-type": "application/json",
-  //         },
-  //         body: JSON.stringify(
-  //           {
-  //             data: {
-  //                 data: currentdate,
-  //                 user: user.id,
-  //                 prods: produtos,
-  //                 totalDoPedido: valor 
-  //             }
-  //           }
-  //         )
-  //       });
-  //       const json = await response.json();
-  //       if (json.data) {
-  //         const pedido = strapiDataToObject(json.data);
-  //         return pedido;
-  //       }
-  //       if (json.error) {
-  //         throw json.error;
-  //       }
-  //     } catch (error) {
-  //       throw error;
-  //     }
-  // },
-
-  async findOnePedido(pedidoId) {
+  async findOnePedido(pedidoId){
     try {
-      const response = await fetch(`${API}/pedidos/${pedidoId}`, {
+      let query = qs.stringify(
+        {
+          populate: [
+            'pedido',
+            'produto'
+          ],
+          filters: {
+            pedido: {
+              id: {
+                $eq: pedidoId
+              },
+            },
+          }
+        },
+        {
+          encodeValuesOnly: true,
+        }
+      );
+      const response = await fetch(`${API}/itens-do-pedidos/?${query}`, {
         headers: {
-          Authorization: `${BEARER} ${auth.getToken()}`,
-          "Content-type": "application/json",
+          Authorization: `${BEARER} ${auth.getToken()}`
         }
       });
       const json = await response.json();
       if (json.data) {
-        const pedido = strapiDataToObject(json.data);
-        return pedido;
+        const itens = strapiDataToObject(json.data);
+        return { itens };
       }
       if (json.error) {
         throw json.error;
@@ -250,6 +148,5 @@ export const Pedidos = {
     } catch (error) {
       throw error;
     }
-  },
-
+  }
 }

@@ -20,7 +20,6 @@ export default function Pedido() {
   return (
     <>
       <h1>Olá, Aqui está seus pedidos!</h1>
-      {console.log(dados)}
       <ListGroup>
         {dados.map((pedido) => (
           <ListGroup.Item key={pedido.id}>
