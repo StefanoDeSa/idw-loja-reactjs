@@ -34,16 +34,16 @@ export default function Detalhe() {
                         </tr>
                     </thead>
                     <tbody>
-                        {dados.itens.map((pedido) => (
+                        {dados.itens.map((item) => (
                             <tr>
                                 <td>
-                                    {pedido.produto.nome}
+                                    {item.produto.nome}
                                 </td>
                                 <td>
-                                    {pedido.quantidade}
+                                    {item.quantidade}
                                 </td>
                                 <td>
-                                    {(pedido.produto.preco * pedido.quantidade).toLocaleString('pt-BR', {
+                                    {(item.produto.preco * item.quantidade).toLocaleString('pt-BR', {
                                         style: 'currency',
                                         currency: 'BRL'
                                     })}
