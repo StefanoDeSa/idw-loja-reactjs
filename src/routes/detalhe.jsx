@@ -15,10 +15,12 @@ export default function Detalhe() {
     return (
         <>
             <Container>
-                <h1>Detalhes do pedido</h1>
+                <Row>
+                    <Col className='d-flex justify-content-center justify-content-md-start'><h1>Detalhes do pedido</h1></Col>
+                </Row>
                 <Row className='my-3'>
-                    <Col><h4>Data</h4>{format(new Date(dados.itens[0].pedido.data), "dd/MM/yyyy HH:mm")}</Col>
-                    <Col className='d-flex flex-column align-items-end'><h4>Total do Pedido</h4>{dados.itens[0].pedido.totalDoPedido.toLocaleString('pt-BR', {
+                    <Col md='4' className='d-flex flex-column align-items-md-start align-items-center mb-3 mb-md-0'><h4>Data</h4>{format(new Date(dados.itens[0].pedido.data), "dd/MM/yyyy HH:mm")}</Col>
+                    <Col md='8' className='d-flex flex-column align-items-md-end align-items-center'><h4>Total do Pedido</h4>{dados.itens[0].pedido.totalDoPedido.toLocaleString('pt-BR', {
                         style: 'currency',
                         currency: 'BRL'
                     })}</Col>
