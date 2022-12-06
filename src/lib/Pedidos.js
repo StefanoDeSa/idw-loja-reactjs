@@ -148,5 +148,21 @@ export const Pedidos = {
     } catch (error) {
       throw error;
     }
+  },
+
+  async findAll(){
+    const response = await fetch(`${API}/pedidos/?populate=user`, {
+      headers: {
+        Authorization: `${BEARER} ${auth.getToken()}`
+      }
+    });
+    const json = await response.json();
+    if (json.data) {
+      const pedidos = strapiDataToObject(json.data);
+      return { pedidos };
+    }
+    if (json.error) {
+      throw json.error;
+    }
   }
 }

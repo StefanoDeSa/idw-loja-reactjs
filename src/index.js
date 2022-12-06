@@ -14,6 +14,7 @@ import Perfil, { loader as perfilLoader } from './routes/perfil';
 import Produto, { loader as produtoLoader, ProdutoNaoEncontrado } from './routes/produto';
 import Pedidos, { loader as pedidoLoader } from './routes/pedidos';
 import Detalhe, { loader as detalheLoader } from './routes/detalhe';
+import Relatorio, { loader as relatorioLoader } from './routes/relatorio';
 import RecuperarAcesso from './routes/contas/recuperar-acesso';
 
 const router = createBrowserRouter([
@@ -69,6 +70,11 @@ const router = createBrowserRouter([
             path: 'pedidos/:idPedido',
             loader: detalheLoader,
             element: <Detalhe />,
+          },
+          {
+            path: 'admin/relatorio-de-pedidos',
+            loader: relatorioLoader,
+            element: <Relatorio />
           }
         ]
       }
